@@ -123,14 +123,38 @@ def parse_args(**parser_kwargs):
 def get_sample(selected_index=0, dataset_name="NUSCENES", num_frames=25, action_mode="free"):
     dataset_dict = DATASET2SOURCES[dataset_name]
     action_dict = None
-    if dataset_name == "IMG":
-        image_list = os.listdir(dataset_dict["data_root"])
-        total_length = len(image_list)
-        while selected_index >= total_length:
-            selected_index -= total_length
-        image_file = image_list[selected_index]
+    # if dataset_name == "IMG":
+    #     image_list = os.listdir(dataset_dict["data_root"])
+    #     total_length = len(image_list)
+    #     while selected_index >= total_length:
+    #         selected_index -= total_length
+    #     image_file = image_list[selected_index]
 
-        path_list = [os.path.join(dataset_dict["data_root"], image_file)] * num_frames
+    #     path_list = [os.path.join(dataset_dict["data_root"], image_file)] * num_frames
+
+    if dataset_name == "IMG":
+        from natsort import natsorted
+
+        image_list = natsorted([
+            f for f in os.listdir(dataset_dict["data_root"])
+            if f.lower().endswith((".png", ".jpg", ".jpeg"))
+        ])
+
+        total_length = len(image_list)
+
+        if total_length < num_frames:
+            raise ValueError(f"Not enough images in {dataset_dict['data_root']}")
+
+        start_index = selected_index
+        path_list = []
+
+        for i in range(num_frames):
+            idx = (start_index + i) % total_length
+            image_file = image_list[idx]
+            path_list.append(os.path.join(dataset_dict["data_root"], image_file))
+
+        selected_index = (start_index + num_frames) % total_length
+    
     else:
         with open(dataset_dict["anno_file"], "r") as anno_json:
             all_samples = json.load(anno_json)
