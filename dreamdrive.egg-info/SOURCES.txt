@@ -1,0 +1,7 @@
+LICENSE
+README.md
+setup.py
+dreamdrive.egg-info/PKG-INFO
+dreamdrive.egg-info/SOURCES.txt
+dreamdrive.egg-info/dependency_links.txt
+dreamdrive.egg-info/top_level.txt

@@ -36,7 +36,7 @@ DATASET2SOURCES = {
     }
 }
 
-
+#reduced ressolution and frames to run test gave as less gpu
 def parse_args(**parser_kwargs):
     parser = argparse.ArgumentParser(**parser_kwargs)
     parser.add_argument(
@@ -114,7 +114,7 @@ def parse_args(**parser_kwargs):
     parser.add_argument(
         "--n_steps",
         type=int,
-        default=50,
+        default=50, 
         help="number of sampling steps"
     )
     parser.add_argument(
