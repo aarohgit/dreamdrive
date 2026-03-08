@@ -31,10 +31,16 @@ cp $DATA_PATH/checkpoints/* submodules/vista/ckpts/
 mkdir -p submodules/vista/image_folder
 cp -r $DATA_PATH/image_folder/* submodules/vista/image_folder/
 
+mkdir -p data/benchmark
+
+
 export PYTHONPATH=$PWD
 
+
 python -m dreamdrive.diffusion.sample \
---n_frames 40 \
+--n_frames 25 \
+--n_rounds 5 \
+--n_conds 5 \
 --height 576 \
 --width 1024 \
 --n_steps 50 \
