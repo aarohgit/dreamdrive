@@ -1,0 +1,22 @@
+$schema: https://azuremlschemas.azureedge.net/latest/commandJob.schema.json
+
+command: >
+  bash run.sh ${{inputs.data}}
+
+code: .
+
+environment: azureml:dreamdrive-env@latest
+
+compute: azureml:trace-temp
+
+inputs:
+  data:
+    type: uri_folder
+    path: azureml:dreamdrive_input@latest
+
+outputs:
+  videos:
+    type: uri_folder
+
+resources:
+  instance_count: 1

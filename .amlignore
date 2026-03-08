@@ -1,0 +1,8 @@
+dreamdrive_data/
+image_folder/
+submodules/vista/ckpts/
+
+*.safetensors
+*.bin
+*.pt
+*.pth
