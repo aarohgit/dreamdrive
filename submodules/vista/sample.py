@@ -21,7 +21,7 @@ DATASET2SOURCES = {
         "anno_file": "annos/nuScenes_val.json"
     },
     "IMG": {
-        "data_root": "image_folder"
+        "data_root": os.environ.get("DATA_ROOT", "image_folder")
     }
 }
 
@@ -252,19 +252,35 @@ if __name__ == "__main__":
         images = torch.stack(img_seq)
 
         value_dict = init_embedder_options(unique_keys)
-        cond_img = img_seq[0][None]
-        value_dict["cond_frames_without_noise"] = cond_img
+        # Use multiple frames as conditioning
+        cond_frames = torch.stack(img_seq[:5])
+
+        value_dict["cond_frames_without_noise"] = cond_frames
         value_dict["cond_aug"] = opt.cond_aug
-        value_dict["cond_frames"] = cond_img + opt.cond_aug * torch.randn_like(cond_img)
+        value_dict["cond_frames"] = cond_frames + opt.cond_aug * torch.randn_like(cond_frames)
         if action_dict is not None:
             for key, value in action_dict.items():
                 value_dict[key] = value
 
+        # if opt.n_rounds > 1:
+        #     guider = "TrianglePredictionGuider"
+        # else:
+        #     guider = "VanillaCFG"
+        # sampler = init_sampling(guider=guider, steps=opt.n_steps, cfg_scale=opt.cfg_scale, num_frames=opt.n_frames)
         if opt.n_rounds > 1:
             guider = "TrianglePredictionGuider"
         else:
             guider = "VanillaCFG"
-        sampler = init_sampling(guider=guider, steps=opt.n_steps, cfg_scale=opt.cfg_scale, num_frames=opt.n_frames)
+
+        # stability improvement for long videos
+        cfg_scale = min(opt.cfg_scale, 2.0)
+
+        sampler = init_sampling(
+            guider=guider,
+            steps=opt.n_steps,
+            cfg_scale=cfg_scale,
+            num_frames=opt.n_frames
+        )
 
         uc_keys = ["cond_frames", "cond_frames_without_noise", "command", "trajectory", "speed", "angle", "goal"]
 
