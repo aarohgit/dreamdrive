@@ -40,6 +40,6 @@ python -m dreamdrive.diffusion.sample \
 --n_frames 25 \
 --n_rounds 5 \
 --n_conds 5 \
---height 576 \
---width 1024 \
+--height 448 \
+--width 768 \
 --n_steps 50
