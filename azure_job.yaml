@@ -5,7 +5,7 @@ command: >
 
 code: .
 
-environment: azureml:dreamdrive-env@latest
+environment: azureml:AzureML-pytorch-2.0-cuda11.7-py310:1
 
 compute: azureml:value-engineering-V100-2x
 
