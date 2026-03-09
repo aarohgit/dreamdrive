@@ -7,7 +7,7 @@ code: .
 
 environment: azureml:dreamdrive-env:1
 
-compute: azureml:value-engineering-V100-2x
+compute: azureml:value-engineering-A100
 
 inputs:
   data:
