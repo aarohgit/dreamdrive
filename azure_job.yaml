@@ -7,7 +7,7 @@ code: .
 
 environment: azureml:dreamdrive-env@latest
 
-compute: azureml:trace-temp
+compute: azureml:value-engineering-A100
 
 inputs:
   data:
