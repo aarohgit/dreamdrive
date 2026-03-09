@@ -23,19 +23,18 @@ cd submodules/vista
 pip install -e . --no-build-isolation
 cd ../../
 
-# Copy checkpoints from Azure dataset
+# Copy checkpoints
 mkdir -p submodules/vista/ckpts
 cp $DATA_PATH/checkpoints/* submodules/vista/ckpts/
 
-# Copy input frames from Azure dataset
+# Copy images
 mkdir -p submodules/vista/image_folder
 cp -r $DATA_PATH/image_folder/* submodules/vista/image_folder/
 
 mkdir -p data/benchmark
 
-
 export PYTHONPATH=$PWD
-
+export DATA_ROOT=submodules/vista/image_folder
 
 python -m dreamdrive.diffusion.sample \
 --n_frames 25 \
@@ -43,5 +42,4 @@ python -m dreamdrive.diffusion.sample \
 --n_conds 5 \
 --height 576 \
 --width 1024 \
---n_steps 50 \
---fps 12
+--n_steps 50
