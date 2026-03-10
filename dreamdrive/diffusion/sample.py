@@ -287,39 +287,40 @@ if __name__ == "__main__":
         if isinstance(out, (tuple, list)):
             samples, samples_z, inputs, feats = out
             scene_names = sorted(os.listdir(opt.save_dir))
+            
             if len(scene_names) == 0:
                 save_scene = "scene_0000"
             else:
                 scene_index = int(scene_names[-1].split("_")[-1]) + 1
                 save_scene = f"scene_{scene_index:04d}"
+
             num_views = len(samples)
             virtual_path = os.path.join(opt.save_dir, save_scene, f"{num_views}_views")
             os.makedirs(virtual_path, exist_ok=True)
-            # real_path = os.path.join(opt.save_dir, "real", str(sample_index))
-            perform_save_locally(virtual_path, samples, "videos", opt.dataset, sample_index)
-            # perform_save_locally(virtual_path, samples, "grids", opt.dataset, sample_index)
-            perform_save_locally(virtual_path, samples, "images", opt.dataset, sample_index)
-            perform_save_locally(virtual_path, feats, "featmaps", opt.dataset, sample_index)
-            # perform_save_locally(real_path, inputs, "videos", opt.dataset, sample_index)
-            # perform_save_locally(real_path, inputs, "grids", opt.dataset, sample_index)
-            # perform_save_locally(real_path, inputs, "images", opt.dataset, sample_index)
-            
-            # pca feature map for diffusion features
-            process_data(
-                input_folder=os.path.join(virtual_path, "featmaps"), 
-                output_folder=virtual_path, 
-                N=32, 
-                ori_size=(288, 512), 
-                featkey="in_feats_0"
-            )
 
-            # pca feature map for dino features
-            get_dinov2_featuremap_v2(
-                img_folder=os.path.join(virtual_path, "images"), 
-                output_folder=virtual_path, 
-                N=32, 
-                ori_size=(288, 512)
-            )
+            # Save only videos and images
+            perform_save_locally(virtual_path, samples, "videos", opt.dataset, sample_index)
+            perform_save_locally(virtual_path, samples, "images", opt.dataset, sample_index)
+
+            # DISABLED: heavy feature map saving (causes Azure disk overflow)
+            # perform_save_locally(virtual_path, feats, "featmaps", opt.dataset, sample_index)
+
+            # DISABLED: PCA processing of diffusion features
+            # process_data(
+            #     input_folder=os.path.join(virtual_path, "featmaps"),
+            #     output_folder=virtual_path,
+            #     N=32,
+            #     ori_size=(288, 512),
+            #     featkey="in_feats_0"
+            # )
+
+            # DISABLED: DINO feature map generation
+            # get_dinov2_featuremap_v2(
+            #     img_folder=os.path.join(virtual_path, "images"),
+            #     output_folder=virtual_path,
+            #     N=32,
+            #     ori_size=(288, 512)
+            # )
 
         else:
             raise TypeError
