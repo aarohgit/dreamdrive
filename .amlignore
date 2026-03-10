@@ -1,19 +1,32 @@
+# Local datasets
 dreamdrive_data/
 image_folder/
-submodules/vista/ckpts/
 
+# Ignore checkpoints everywhere
 *.safetensors
 *.bin
 *.pt
 *.pth
 *.ckpt
+
+# Ignore heavy files in submodules
+submodules/**/ckpts/
+submodules/**/checkpoints/
+submodules/**/*.safetensors
+
+# Media / archives
 *.zip
 *.mp4
 *.npy
 
+# Outputs
 outputs/
 videos/
 data/
 
+# Python cache
 __pycache__/
+
+# Git
 .git/
+.gitignore
